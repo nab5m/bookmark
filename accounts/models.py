@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UsernameValidator(ASCIIUsernameValidator):
-    regex = r'^[\w-_]+\Z'
+    regex = r'^[\w-]+\Z'
     message = _(
         '영문자, 숫자, - 또는 _만 사용 가능합니다.'
     )
@@ -29,5 +29,5 @@ class UserProfile(AbstractUser):
     first_name = last_name = None
 
 
-    REQUIRED_FIELDS = []
+    # REQUIRED_FIELDS = [email]
     # username과 password는 required, AbstractUser에서는 email도

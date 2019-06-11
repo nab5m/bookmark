@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ block.super }}-리스트{% endblock %}
+{% block content %}
+<div class="container">
+    <a href="#" class="btn btn-info mb-3">
+        추가하기
+    </a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>사이트 이름</th>
+                <th>URL</th>
+                <th>생성시간</th>
+                <th>수정시간</th>
+                <th>수정하기</th>
+                <th>삭제하기</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bookmark in object_list %}
+                <tr>
+                    <td>{{ bookmark.id }}</td>
+                    <td>{{ bookmark.site_name }}</td>
+                    <td>
+                        <a href="{{ bookmark.site_url }}" target="_blank">
+                            {{ bookmark.site_url }}
+                        </a>
+                    </td>
+                    <td>{{ bookmark.created_at }}</td>
+                    <td>{{ bookmark.updated_at }}</td>
+                    <td>
+                        <button class="btn btn-success">
+                            수정
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger">
+                            삭제
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
