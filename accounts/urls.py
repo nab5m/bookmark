@@ -15,13 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import ListView
 
-from bookmark.models import Bookmark
+import accounts.views
 
-app_name="bookmark"
+app_name = 'accounts'
 
 urlpatterns = [
-    path('', ListView.as_view(model=Bookmark), name="index"),
-
+    path('', accounts.views.index, name="index")
 ]
