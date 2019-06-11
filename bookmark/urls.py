@@ -22,6 +22,6 @@ from bookmark.models import Bookmark
 app_name="bookmark"
 
 urlpatterns = [
-    path('', ListView.as_view(model=Bookmark), name="index"),
+    path('', ListView.as_view(model=Bookmark, paginate_by=5), name="index"),
 
 ]
