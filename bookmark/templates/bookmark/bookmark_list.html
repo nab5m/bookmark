@@ -24,7 +24,11 @@
             {% for bookmark in object_list %}
                 <tr>
                     <td>{{ page_obj.number | item_num:forloop.counter }}</td>
-                    <td>{{ bookmark.site_name }}</td>
+                    <td>
+                        <a href="{% url 'bookmark:detail' bookmark.id %}">
+                            {{ bookmark.site_name }}
+                        </a>
+                    </td>
                     <td>
                         <a href="{{ bookmark.site_url }}" target="_blank">
                             {{ bookmark.site_url }}
