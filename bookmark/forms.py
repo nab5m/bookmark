@@ -3,7 +3,7 @@ from django import forms
 from bookmark.models import Bookmark
 
 
-class BookmarkAddForm(forms.ModelForm):
+class BookmarkForm(forms.ModelForm):
     site_name = forms.CharField(max_length=50, label='사이트 이름', widget=forms.TextInput(
         attrs={'class': 'form-control mt-2'}
     ))

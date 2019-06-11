@@ -37,9 +37,9 @@
                     <td>{{ bookmark.created_at }}</td>
                     <td>{{ bookmark.updated_at }}</td>
                     <td>
-                        <button class="btn btn-success">
+                        <a href="{% url 'bookmark:update' bookmark.id %}" class="btn btn-success">
                             수정
-                        </button>
+                        </a>
                     </td>
                     <td>
                         <a href="{% url 'bookmark:delete' bookmark.id %}" class="btn btn-danger">

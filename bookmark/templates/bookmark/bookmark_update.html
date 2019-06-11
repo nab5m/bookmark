@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ block.super }}-추가{% endblock %}
+{% block title %}{{ block.super }}{% endblock %}
 {% block content %}
     <div class="container">
         <button class="btn btn-info mb-3" onclick="window.history.back()">
@@ -12,7 +12,7 @@
                     {{ field.label }}<br/>
                     {{ field }}<br/>
                 {% endfor %}
-                <input type="submit" value="추가" class="btn btn-success w-100" />
+                <input type="submit" value="수정" class="btn btn-success w-100" />
             </form>
         </div>
     </div>
