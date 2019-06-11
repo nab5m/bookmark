@@ -20,9 +20,10 @@
             </tr>
         </thead>
         <tbody>
+            {% load bookmark_extra %}
             {% for bookmark in object_list %}
                 <tr>
-                    <td>{{ bookmark.id }}</td>
+                    <td>{{ page_obj.number | item_num:forloop.counter }}</td>
                     <td>{{ bookmark.site_name }}</td>
                     <td>
                         <a href="{{ bookmark.site_url }}" target="_blank">
@@ -56,7 +57,6 @@
                         <a class="page-link" href="#">previous</a>
                     </li>
                 {% endif %}
-                {% load custom_range %}
                 {% for page_num in page_obj.number|prange:page_obj.paginator.num_pages %}
                     {% if page_num == page_obj.number %}
                         <li class="page-item disabled">

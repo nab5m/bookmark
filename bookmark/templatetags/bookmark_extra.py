@@ -12,3 +12,8 @@ def page_range(value, arg):
         page_end = arg
 
     return list(range(page_start, page_end+1))
+
+@register.filter(name='item_num')
+def item_num(value, arg):
+    item_num = (value-1)*5 + arg
+    return item_num
