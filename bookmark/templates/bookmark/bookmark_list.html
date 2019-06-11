@@ -38,9 +38,9 @@
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-danger">
+                        <a href="{% url 'bookmark:delete' bookmark.id %}" class="btn btn-danger">
                             삭제
-                        </button>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
