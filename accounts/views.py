@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -40,3 +40,9 @@ class CustomPWChangeView(PasswordChangeView):
     template_name = 'accounts/password_change.html'
     success_url = reverse_lazy('accounts:password_change_done')
     form_class = PWChangeForm
+
+
+class CustomPWResetView(PasswordResetView):
+    success_url = reverse_lazy('accounts:password_reset_done')
+    email_template_name = 'accounts/password_reset_email.html'
+    subject_template_name = 'accounts/password_reset_subject.txt'

@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm, PasswordResetForm, \
+    SetPasswordForm
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import UserProfile
@@ -48,6 +49,27 @@ class PWChangeForm(PasswordChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control mt-2'
+
+
+class PWResetForm(PasswordResetForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control mt-2'
+            field.label = '이메일'
+            field.help_text = '아래의 이메일로 안내 메시지가 전송됩니다. '\
+                                '회원가입 시 입력한 이메일을 입력해주세요.'
+
+
+# TODO: 복붙한 코드가 너무 많음 이거 커밋하고 정리하기
+class CustomSetPWForm(SetPasswordForm):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(user, *args, **kwargs)
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control mt-2'
