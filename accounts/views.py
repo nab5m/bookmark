@@ -1,10 +1,10 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from accounts.forms import LoginForm, AccountCreationForm
+from accounts.forms import LoginForm, AccountCreationForm, PWChangeForm
 
 
 def index(request): # temporary
@@ -25,6 +25,7 @@ class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
     form_class = LoginForm
 
+
 class RegistrationView(FormView):
     template_name = 'accounts/registration.html'
     success_url = reverse_lazy('accounts:register_success')
@@ -33,3 +34,9 @@ class RegistrationView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+class CustomPWChangeView(PasswordChangeView):
+    template_name = 'accounts/password_change.html'
+    success_url = reverse_lazy('accounts:password_change_done')
+    form_class = PWChangeForm
