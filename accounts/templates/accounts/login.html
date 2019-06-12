@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}{{ block.super }}-로그인{% endblock %}
+{% block content %}
+    <div class="container">
+        <button class="btn btn-info mb-3" onclick="window.history.back()">
+            뒤로 가기
+        </button>
+        <div class="offset-md-3 col-md-6 offset-lg-4 col-lg-4">
+            <form method="post">
+                {% csrf_token %}
+                {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% for field in form %}
+                    {{ field.label }}<br/>
+                    {{ field }}<br/>
+                {% endfor %}
+                <input type="submit" value="로그인" class="btn btn-success w-100" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

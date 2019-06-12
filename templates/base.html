@@ -13,8 +13,23 @@
   </head>
   <body>
     <header class="bg-light">
-        <nav class="container p-3 mb-3 navbar navbar-light">
-            <h2><a href="{% url 'bookmark:index' %}" class="navbar-brand">Django Bookmark</a></h2>
+        <nav class="container p-3 mb-3 navbar navbar-expand-lg navbar-light">
+            <h2 class="col-3 pl-0"><a href="{% url 'bookmark:index' %}" class="navbar-brand">Django Bookmark</a></h2>
+
+            <ul class="navbar-nav col-9 justify-content-end">
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'accounts:login' %}" class="nav-link">로그인</a>
+                    </li>
+                    <li class="nav-item disabled">
+                        <a href="#" class="nav-link">회원가입</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'accounts:logout' %}" class="nav-link">로그아웃</a>
+                    </li>
+                {% endif %}
+            </ul>
         </nav>
     </header>
 
