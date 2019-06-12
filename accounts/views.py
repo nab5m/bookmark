@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from accounts.forms import LoginForm
+from accounts.forms import LoginForm, AccountCreationForm
 
 
 def index(request): # temporary
@@ -16,6 +16,20 @@ def logout_success(request):
         return render(request, 'accounts/logout_success.html')
 
 
+def register_success(request):
+    if not request.user.is_authenticated:
+        return render(request, 'accounts/register_success.html')
+
+
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
     form_class = LoginForm
+
+class RegistrationView(FormView):
+    template_name = 'accounts/registration.html'
+    success_url = reverse_lazy('accounts:register_success')
+    form_class = AccountCreationForm
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)

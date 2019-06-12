@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.forms.utils import ErrorList
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import UserProfile
@@ -29,3 +30,16 @@ class LoginForm(AuthenticationForm):
         model = UserProfile
         fields = ['username', 'password']
         # TODO: add validator
+
+
+class AccountCreationForm(UserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control mt-2'
+
+    class Meta:
+        model = UserProfile
+        fields = ('username', 'email', 'password1', 'password2', 'name')
