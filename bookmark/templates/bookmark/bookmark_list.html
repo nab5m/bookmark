@@ -2,7 +2,7 @@
 {% block title %}{{ block.super }}-내 북마크 목록{% endblock %}
 {% block content %}
 <div class="container">
-    <a href="#" class="btn btn-info mb-3">
+    <a href="{% url 'bookmark:add_list' %}" class="btn btn-info mb-3">
         추가하기
     </a>
 

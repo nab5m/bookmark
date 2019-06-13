@@ -1,6 +1,19 @@
 from django import forms
 
-from bookmark.models import BookmarkItem
+from bookmark.models import BookmarkItem, BookmarkList
+from config.library.forms import add_style
+
+
+class ListForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+
+        add_style(self.fields)
+
+    class Meta:
+        model = BookmarkList
+        fields = ['list_name', 'description', 'access_level']
 
 
 class BookmarkForm(forms.ModelForm):

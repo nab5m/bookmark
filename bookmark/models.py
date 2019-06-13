@@ -6,15 +6,21 @@ from accounts.models import UserProfile
 
 
 class BookmarkList(models.Model):
+    user = models.ManyToManyField(UserProfile)
+
     list_name = models.CharField(_("리스트 이름"), max_length=50)
     description = models.CharField(_("설명"), max_length=255)
 
-    models.ManyToManyField(UserProfile)
     ACCESS_LEVEL_CHOICES = (
         ('P', _('개인')),
         ('S', _('공개')),
     )
-    access_level = models.CharField(_("접근 권한"), max_length=1, choices=ACCESS_LEVEL_CHOICES)
+    access_level = models.CharField(
+        _("접근 권한"),
+        max_length=1,
+        choices=ACCESS_LEVEL_CHOICES,
+        default='P',
+    )
 
     created_at = models.DateTimeField(_("생성 시간"), auto_now_add=True)
     updated_at = models.DateTimeField(_("수정 시간"), auto_now=True)

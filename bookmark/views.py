@@ -1,9 +1,27 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
-from bookmark.forms import BookmarkForm
-from bookmark.models import BookmarkItem
+from bookmark.forms import BookmarkForm, ListForm
+from bookmark.models import BookmarkItem, BookmarkList
+
+
+class BookmarkListView(ListView):
+    model = BookmarkList
+    template_name = "bookmark/bookmark_list.html"
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super(BookmarkListView, self).get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
+
+
+class ListCreateView(CreateView):
+    model = BookmarkList
+    template_name = 'bookmark/list_add.html'
+    form_class = ListForm
+    success_url = reverse_lazy('bookmark:index')
 
 
 class BookmarkItemCreateView(CreateView):
