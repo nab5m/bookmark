@@ -4,4 +4,4 @@ __pycache__
 *.pyc
 *.log
 .idea
-db.sqllite3
+db.sqlite3

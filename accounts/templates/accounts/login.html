@@ -1,0 +1,11 @@
+{% extends 'form_base.html' %}
+{% block title %}{{ block.super }}-로그인{% endblock %}
+{% block content %}
+    <div class="container">
+        {% include 'back_button.html' %}
+
+        {% with '로그인' as button_value %}
+            {{ block.super }}
+        {% endwith %}
+    </div>
+{% endblock %}
