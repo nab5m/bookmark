@@ -2,9 +2,8 @@
 {% block title %}{{ block.super }}-삭제{% endblock %}
 {% block content %}
     <div class="container">
-        <button class="btn btn-info mb-3" onclick="window.history.back()">
-            뒤로 가기
-        </button><!-- TODO: 뒤로가기 버튼 세 번 반복 -->
+        {% include 'back_button.html' %}
+
         <form method="post">
             {% csrf_token %}
             <div class="alert alert-danger">

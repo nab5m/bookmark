@@ -2,9 +2,8 @@
 {% block title %}{{ block.super }}-조회{% endblock %}
 {% block content %}
     <div class="container">
-        <button class="btn btn-info mb-3" onclick="window.history.back()">
-            뒤로 가기
-        </button>
+        {% include 'back_button.html' %}
+
         <table class="table">
             <thead>
                 <tr>

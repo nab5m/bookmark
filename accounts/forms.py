@@ -7,12 +7,19 @@ from accounts.models import UserProfile
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=36, label='아이디', widget=forms.TextInput(
-        attrs={'class': 'form-control mt-2'}
-    ))
-    password = forms.CharField(label='비밀번호', widget=forms.PasswordInput(
-        attrs={'class': 'form-control mt-2'}
-    ))
+    username = forms.CharField(
+        max_length=36,
+        label=_('아이디'),
+        widget=forms.TextInput(
+            attrs={'class': 'form-control mt-2'},
+        ),
+    )
+    password = forms.CharField(
+        label=_('비밀번호'),
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control mt-2'},
+        )
+    )
 
     error_messages = {
         'invalid_login': _(
@@ -24,7 +31,7 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(LoginForm, self).__init__(*args, **kwargs)
-        # TODO: 이거 왜 그런거지?
+        # TODO: 이거 왜 그런거지? - AuthForm이 이미 request를 가지고 있다고 본거 같기도
 
     class Meta:
         model = UserProfile
@@ -32,7 +39,7 @@ class LoginForm(AuthenticationForm):
         # TODO: add validator
 
 
-class AccountCreationForm(UserCreationForm):
+class RegistrationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
@@ -54,20 +61,21 @@ class PWChangeForm(PasswordChangeForm):
             field.widget.attrs['class'] = 'form-control mt-2'
 
 
-class PWResetForm(PasswordResetForm):
+class PWResetEmailForm(PasswordResetForm):
 
     def __init__(self, *args, **kwargs):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control mt-2'
-            field.label = '이메일'
-            field.help_text = '아래의 이메일로 안내 메시지가 전송됩니다. '\
-                                '회원가입 시 입력한 이메일을 입력해주세요.'
+            if field_name == 'email':   # TODO: why not use gettext function
+                field.label = '이메일'
+                field.help_text = \
+                    '아래의 이메일로 안내 메시지가 전송됩니다. '\
+                    '회원가입 시 입력한 이메일을 입력해주세요.'
 
 
-# TODO: 복붙한 코드가 너무 많음 이거 커밋하고 정리하기
-class CustomSetPWForm(SetPasswordForm):
+class PWResetForm(SetPasswordForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(user, *args, **kwargs)
 
