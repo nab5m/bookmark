@@ -2,7 +2,7 @@
 {% block title %}{{ block.super }}-리스트{% endblock %}
 {% block content %}
 <div class="container">
-    <a href="#" class="btn btn-info mb-3">
+    <a href="{% url 'bookmark:add_item' request.resolver_match.kwargs.pk %}" class="btn btn-info mb-3">
         추가하기
     </a>
 
@@ -25,7 +25,7 @@
                 <tr>
                     <td>{{ page_obj.number | item_num:forloop.counter }}</td>
                     <td>
-                        <a href="#">
+                        <a href="{% url 'bookmark:item_detail' list_pk=request.resolver_match.kwargs.pk pk=bookmark.id %}">
                             {{ bookmark.site_name }}
                         </a>
                     </td>
@@ -37,12 +37,12 @@
                     <td>{{ bookmark.created_at }}</td>
                     <td>{{ bookmark.updated_at }}</td>
                     <td>
-                        <a href="#" class="btn btn-success">
+                        <a href="{% url 'bookmark:update_item' list_pk=request.resolver_match.kwargs.pk pk=bookmark.id %}" class="btn btn-success">
                             수정
                         </a>
                     </td>
                     <td>
-                        <a href="#" class="btn btn-danger">
+                        <a href="{% url 'bookmark:delete_item' list_pk=request.resolver_match.kwargs.pk pk=bookmark.id %}" class="btn btn-danger">
                             삭제
                         </a>
                     </td>

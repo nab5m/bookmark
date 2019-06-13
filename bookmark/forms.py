@@ -16,7 +16,7 @@ class ListForm(forms.ModelForm):
         fields = ['list_name', 'description', 'access_level']
 
 
-class BookmarkForm(forms.ModelForm):
+class ItemForm(forms.ModelForm):
     site_name = forms.CharField(
         max_length=50,
         label='사이트 이름',

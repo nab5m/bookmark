@@ -2,8 +2,8 @@ from django.urls import path, reverse_lazy
 from django.views.generic import ListView, DeleteView, DetailView
 
 from bookmark.models import BookmarkItem, BookmarkList
-from bookmark.views import BookmarkItemCreateView, BookmarkItemUpdateView, ListCreateView, BookmarkListView, \
-    ListUpdateView, ItemListView
+from bookmark.views import ListCreateView, BookmarkListView, \
+    ListUpdateView, ItemListView, ItemCreateView, ItemDeleteView, ItemDetailView, ItemUpdateView
 
 app_name="bookmark"
 
@@ -17,14 +17,10 @@ urlpatterns = [
         ), name="delete_list"
     ),
     path('update/<int:pk>', ListUpdateView.as_view(), name="update_list"),
+
     path('<int:pk>/', ItemListView.as_view(), name="item_list"),
-    # path('', ListView.as_view(model=BookmarkItem, paginate_by=5), name="index"),
-    # path('add/', BookmarkItemCreateView.as_view(), name="add"),
-    # path('delete/<int:pk>/', DeleteView.as_view(
-    #        model=BookmarkItem,
-    #        success_url=reverse_lazy('bookmark:index'),
-    #    ), name="delete",
-    # ),
-    # path('detail/<int:pk>', DetailView.as_view(model=BookmarkItem), name="detail"),
-    # path('update/<int:pk>', BookmarkItemUpdateView.as_view(), name="update"),
+    path('<int:pk>/add/', ItemCreateView.as_view(), name="add_item"),
+    path('<int:list_pk>/delete/<int:pk>/', ItemDeleteView.as_view(), name="delete_item"),
+    path('<int:list_pk>/detail/<int:pk>', ItemDetailView.as_view(), name="item_detail"),
+    path('<int:list_pk>/update/<int:pk>', ItemUpdateView.as_view(), name="update_item"),
 ]
