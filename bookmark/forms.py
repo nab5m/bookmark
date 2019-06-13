@@ -1,6 +1,6 @@
 from django import forms
 
-from bookmark.models import Bookmark
+from bookmark.models import BookmarkItem
 
 
 class BookmarkForm(forms.ModelForm):
@@ -19,6 +19,6 @@ class BookmarkForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Bookmark
+        model = BookmarkItem
         fields = ['site_name', 'site_url']
         # TODO: add validator
