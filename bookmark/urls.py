@@ -9,6 +9,12 @@ app_name="bookmark"
 urlpatterns = [
     path('', BookmarkListView.as_view(), name="index"),
     path('add/', ListCreateView.as_view(), name="add_list"),
+    path('delete/<int:pk>', DeleteView.as_view(
+            model=BookmarkList,
+            success_url=reverse_lazy('bookmark:index'),
+            template_name='bookmark/list_confirm_delete.html',
+        ), name="delete_list"
+    ),
     # path('', ListView.as_view(model=BookmarkItem, paginate_by=5), name="index"),
     # path('add/', BookmarkItemCreateView.as_view(), name="add"),
     # path('delete/<int:pk>/', DeleteView.as_view(

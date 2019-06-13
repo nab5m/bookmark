@@ -25,6 +25,9 @@ class BookmarkList(models.Model):
     created_at = models.DateTimeField(_("생성 시간"), auto_now_add=True)
     updated_at = models.DateTimeField(_("수정 시간"), auto_now=True)
 
+    def __str__(self):
+        return '<' + self.list_name + '> ' + self.description
+
 
 class BookmarkItem(models.Model):
     belonged_list = models.ForeignKey(BookmarkList, on_delete=models.CASCADE)
