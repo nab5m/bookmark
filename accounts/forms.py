@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, Pass
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import UserProfile
+from config.library.forms import add_style
 
 
 class LoginForm(AuthenticationForm):
@@ -44,8 +45,7 @@ class RegistrationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control mt-2'
+        add_style(self.fields)
 
     class Meta:
         model = UserProfile
@@ -57,8 +57,7 @@ class PWChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control mt-2'
+        add_style(self.fields)
 
 
 class PWResetEmailForm(PasswordResetForm):
@@ -66,18 +65,17 @@ class PWResetEmailForm(PasswordResetForm):
     def __init__(self, *args, **kwargs):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control mt-2'
-            if field_name == 'email':   # TODO: why not use gettext function
-                field.label = '이메일'
-                field.help_text = \
-                    '아래의 이메일로 안내 메시지가 전송됩니다. '\
-                    '회원가입 시 입력한 이메일을 입력해주세요.'
+        add_style(self.fields)
+
+        email = self.fields['email']
+        email.label = '이메일'
+        email.help_text = \
+            '아래의 이메일로 안내 메시지가 전송됩니다. '\
+            '회원가입 시 입력한 이메일을 입력해주세요.'
 
 
 class PWResetForm(SetPasswordForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(user, *args, **kwargs)
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control mt-2'
+        add_style(self.fields)
