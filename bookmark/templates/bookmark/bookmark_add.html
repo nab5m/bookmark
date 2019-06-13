@@ -1,18 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'form_base.html' %}
 {% block title %}{{ block.super }}-추가{% endblock %}
 {% block content %}
     <div class="container">
         {% include 'back_button.html' %}
 
-        <div class="offset-md-3 col-md-6 offset-lg-4 col-lg-4">
-            <form method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                    {{ field.label }}<br/>
-                    {{ field }}<br/>
-                {% endfor %}
-                <input type="submit" value="추가" class="btn btn-success w-100" />
-            </form>
-        </div>
+        {% with '추가' as button_value %}
+            {{ block.super }}
+        {% endwith %}
     </div>
 {% endblock %}
