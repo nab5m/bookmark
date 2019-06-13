@@ -43,7 +43,7 @@
                     <td>{{ bookmark_list.created_at }}</td>
                     <td>{{ bookmark_list.updated_at }}</td>
                     <td>
-                        <a href="#" class="btn btn-success">
+                        <a href="{% url 'bookmark:update_list' bookmark_list.id %}" class="btn btn-success">
                             수정
                         </a>
                     </td>

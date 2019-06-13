@@ -17,6 +17,12 @@ class BookmarkListView(ListView):
         return queryset
 
 
+class ListUpdateView(UpdateView):
+    model = BookmarkList
+    template_name = 'bookmark/list_update.html'
+    form_class = ListForm
+
+
 class ListCreateView(CreateView):
     model = BookmarkList
     template_name = 'bookmark/list_add.html'
