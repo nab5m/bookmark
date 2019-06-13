@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}{{ block.super }}-내 북마크 목록{% endblock %}
+{% block title %}{{ block.super }}-리스트{% endblock %}
 {% block content %}
 <div class="container">
-    <a href="#" class="btn btn-info mb-3">
+    <a href="{% url 'bookmark:add' %}" class="btn btn-info mb-3">
         추가하기
     </a>
 
@@ -11,9 +11,8 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>리스트 이름</th>
-                <th>설명</th>
-                <th>접근 권한</th>
+                <th>사이트 이름</th>
+                <th>URL</th>
                 <th>생성시간</th>
                 <th>수정시간</th>
                 <th>수정하기</th>
@@ -22,33 +21,28 @@
         </thead>
         <tbody>
             {% load bookmark_extra %}
-            {% for bookmark_list in object_list %}
+            {% for bookmark in object_list %}
                 <tr>
                     <td>{{ page_obj.number | item_num:forloop.counter }}</td>
                     <td>
-                        <a href="#">
-                            {{ bookmark_list.list_name }}
+                        <a href="{% url 'bookmark:detail' bookmark.id %}">
+                            {{ bookmark.site_name }}
                         </a>
                     </td>
                     <td>
-                        {{ bookmark_list.description }}
+                        <a href="{{ bookmark.site_url }}" target="_blank">
+                            {{ bookmark.site_url }}
+                        </a>
                     </td>
+                    <td>{{ bookmark.created_at }}</td>
+                    <td>{{ bookmark.updated_at }}</td>
                     <td>
-                        {% for abbr, value in bookmark_list.ACCESS_LEVEL_CHOICES %}
-                            {% if abbr == bookmark_list.access_level %}
-                                {{ value }}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>{{ bookmark_list.created_at }}</td>
-                    <td>{{ bookmark_list.updated_at }}</td>
-                    <td>
-                        <a href="#" class="btn btn-success">
+                        <a href="{% url 'bookmark:update' bookmark.id %}" class="btn btn-success">
                             수정
                         </a>
                     </td>
                     <td>
-                        <a href="#" class="btn btn-danger">
+                        <a href="{% url 'bookmark:delete' bookmark.id %}" class="btn btn-danger">
                             삭제
                         </a>
                     </td>
