@@ -2,7 +2,7 @@
 {% block title %}{{ block.super }}-리스트{% endblock %}
 {% block content %}
 <div class="container">
-    <a href="{% url 'bookmark:add' %}" class="btn btn-info mb-3">
+    <a href="#" class="btn btn-info mb-3">
         추가하기
     </a>
 
@@ -25,7 +25,7 @@
                 <tr>
                     <td>{{ page_obj.number | item_num:forloop.counter }}</td>
                     <td>
-                        <a href="{% url 'bookmark:detail' bookmark.id %}">
+                        <a href="#">
                             {{ bookmark.site_name }}
                         </a>
                     </td>
@@ -37,12 +37,12 @@
                     <td>{{ bookmark.created_at }}</td>
                     <td>{{ bookmark.updated_at }}</td>
                     <td>
-                        <a href="{% url 'bookmark:update' bookmark.id %}" class="btn btn-success">
+                        <a href="#" class="btn btn-success">
                             수정
                         </a>
                     </td>
                     <td>
-                        <a href="{% url 'bookmark:delete' bookmark.id %}" class="btn btn-danger">
+                        <a href="#" class="btn btn-danger">
                             삭제
                         </a>
                     </td>
@@ -50,11 +50,14 @@
             {% endfor %}
         </tbody>
     </table>
+
     {% if is_paginated %}
         <ul class="pagination pagination-sm justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="/bookmark?page={{ page_obj.previous_page_number }}">previous</a>
+                        <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_obj.previous_page_number }}">
+                            previous
+                        </a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
@@ -64,18 +67,24 @@
                 {% for page_num in page_obj.number|prange:page_obj.paginator.num_pages %}
                     {% if page_num == page_obj.number %}
                         <li class="page-item disabled">
-                            <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
+                            <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_num }}">
+                                {{ page_num }}
+                            </a>
                         </li>
                     {% else %}
                         <li class="page-item">
-                            <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
+                            <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_num }}">
+                                {{ page_num }}
+                            </a>
                         </li>
                     {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="/bookmark?page={{ page_obj.next_page_number }}">next</a>
+                        <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_obj.next_page_number }}">
+                            next
+                        </a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">

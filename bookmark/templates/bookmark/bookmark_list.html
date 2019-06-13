@@ -26,7 +26,7 @@
                 <tr>
                     <td>{{ page_obj.number | item_num:forloop.counter }}</td>
                     <td>
-                        <a href="#">
+                        <a href="{% url 'bookmark:item_list' bookmark_list.id %}">
                             {{ bookmark_list.list_name }}
                         </a>
                     </td>

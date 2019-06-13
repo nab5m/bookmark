@@ -30,6 +30,17 @@ class ListCreateView(CreateView):
     success_url = reverse_lazy('bookmark:index')
 
 
+class ItemListView(ListView):
+    model = BookmarkItem
+    template_name = "bookmark/bookmark_item_list.html"
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super(ItemListView, self).get_queryset()
+        queryset = queryset.filter(belonged_list=self.kwargs['pk'])
+        return queryset
+
+
 class BookmarkItemCreateView(CreateView):
     model = BookmarkItem
     template_name = 'bookmark/bookmark_add.html'
