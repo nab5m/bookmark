@@ -1,7 +1,8 @@
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView, DetailView
 
+from accounts.models import UserProfile
 from bookmark.forms import ListForm, ItemForm
 from bookmark.models import BookmarkItem, BookmarkList
 
@@ -25,6 +26,7 @@ class ListUpdateView(UpdateView):
     model = BookmarkList
     template_name = 'bookmark/list_update.html'
     form_class = ListForm
+    success_url = reverse_lazy('bookmark:index')
 
 
 class ListCreateView(CreateView):
@@ -92,3 +94,41 @@ class ItemUpdateView(UpdateView):
             'bookmark:item_list',
             args=[self.request.resolver_match.kwargs['pk']],
         )
+
+
+class PublicBookmarkListView(ListView):
+    model = BookmarkList
+    template_name = "bookmark/bookmark_public_list.html"
+    paginate_by = 5
+
+    def get_queryset(self):
+        _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['username']).get()
+        print(_user)
+        if _user:
+            queryset = get_list_or_404(BookmarkList, user=_user, access_level='S')
+            return queryset
+        else:
+            # TODO: 임시 방편
+            return []
+
+
+class PublicItemListView(ListView):
+    model = BookmarkList
+    template_name = "bookmark/item_list.html"
+    paginate_by = 5
+
+    def get_queryset(self):
+        _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['username']).get()
+        print(_user)
+        if _user:
+            _list = get_object_or_404(
+                BookmarkList,
+                user=_user,
+                access_level='S',
+                id=self.request.resolver_match.kwargs['pk']
+            )
+            queryset = _list.bookmarkitem_set.all()
+            return queryset
+        else:
+            # TODO: 임시 방편
+            return []
