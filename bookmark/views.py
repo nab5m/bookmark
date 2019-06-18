@@ -10,7 +10,7 @@ from bookmark.models import BookmarkItem, BookmarkList
 class BookmarkListView(ListView):
     model = BookmarkList
     template_name = "bookmark/bookmark_list.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         user = self.request.user
@@ -35,6 +35,14 @@ class ListCreateView(CreateView):
     form_class = ListForm
     success_url = reverse_lazy('bookmark:index')
 
+    def form_valid(self, form):
+        _is_valid = super(ListCreateView, self).form_valid(form)
+        if _is_valid:
+            _list = form.instance
+            _list.user.set([self.request.user])
+
+        return _is_valid
+
 
 class ItemListView(ListView):
     model = BookmarkItem
@@ -44,7 +52,7 @@ class ItemListView(ListView):
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:
-            queryset = get_list_or_404(BookmarkItem, belonged_list=self.kwargs['pk'])
+            queryset = BookmarkItem.objects.filter(belonged_list=self.kwargs['pk'])
             return queryset
         else:
             # TODO: 임시 방편

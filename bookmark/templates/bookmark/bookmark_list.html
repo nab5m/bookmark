@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}{{ block.super }}-내 북마크 목록{% endblock %}
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bookmark/css/bookmark_list.css' %}"/>
+{% endblock %}
 {% block content %}
 <div class="container">
     {% if messages %}
@@ -9,92 +13,120 @@
     {% endif %}
 
     <a href="{% url 'bookmark:add_list' %}" class="btn btn-info mb-3">
-        추가하기
+        <i class="fas fa-pencil-alt" style="padding: 0.2rem;"></i> 추가하기
     </a>
 
-    <!-- TODO: responsive table -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>리스트 이름</th>
-                <th>설명</th>
-                <th>접근 권한</th>
-                <th>생성시간</th>
-                <th>수정시간</th>
-                <th>수정하기</th>
-                <th>삭제하기</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% load bookmark_extra %}
-            {% for bookmark_list in object_list %}
-                <tr>
-                    <td>{{ page_obj.number | item_num:forloop.counter }}</td>
-                    <td>
-                        <a href="{% url 'bookmark:item_list' bookmark_list.id %}">
-                            {{ bookmark_list.list_name }}
-                        </a>
-                    </td>
-                    <td>
-                        {{ bookmark_list.description }}
-                    </td>
-                    <td>
-                        {% for abbr, value in bookmark_list.ACCESS_LEVEL_CHOICES %}
-                            {% if abbr == bookmark_list.access_level %}
-                                {{ value }}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>{{ bookmark_list.created_at }}</td>
-                    <td>{{ bookmark_list.updated_at }}</td>
-                    <td>
-                        <a href="{% url 'bookmark:update_list' bookmark_list.id %}" class="btn btn-success">
-                            수정
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{% url 'bookmark:delete_list' bookmark_list.id %}" class="btn btn-danger">
-                            삭제
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% if is_paginated %}
-        <ul class="pagination pagination-sm justify-content-center">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="/bookmark?page={{ page_obj.previous_page_number }}">previous</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">previous</a>
-                    </li>
-                {% endif %}
-                {% for page_num in page_obj.number|prange:page_obj.paginator.num_pages %}
-                    {% if page_num == page_obj.number %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
+    <div class="card-columns mb-3">
+        {% for bookmark_list in object_list %}
+            <div class="card
+                {% if bookmark_list.access_level == 'P' %}private{% else %}share{% endif %}">
+                <div class="card-header background-warning px-2">
+                    <i class="fas fa-user-circle align-middle px-2" style="font-size: 2em;"></i>
+                    <span class="align-middle">{{ bookmark_list.user.get.nickname }}</span>
+                </div>
+                <div onclick="location.href='{% url 'bookmark:item_list' bookmark_list.id %}';" class="card-body pl-3" style="text-decoration: none;">
+                    <h5 class="card-title mb-4">{{ bookmark_list.list_name }}
+                        {% comment %}{% if bookmark_list.access_level == 'P' %}(비공개)
+                        {% else %}(공개)
+                        {% endif %} {% endcomment %}
+                    </h5>
+                    <h6 class="card-subtitle mb-4 text-muted">
+                        생성 : {{ bookmark_list.created_at }}<br/>
+                        수정 : {{ bookmark_list.updated_at }}
+                    </h6>
+                    <p class="card-text">{{ bookmark_list.description }}</p>
+                </div>
+                <div class="card-footer text-right background-warning" style="font-size: 1.3rem;">
+                    <i class="far fa-heart" style="padding: 0.2rem;"></i>
+                    <i class="fas fa-share-alt" style="padding: 0.2rem;"></i>
+                    <a href="{% url 'bookmark:update_list' bookmark_list.id %}" style="text-decoration: none;" class="text-dark">
+                        <i class="fas fa-pencil-alt" style="padding: 0.2rem;"></i>
+                    </a>
+                    <a href="{% url 'bookmark:delete_list' bookmark_list.id %}" style="text-decoration: none;" class="text-dark">
+                        <i class="far fa-trash-alt" style="padding: 0.2rem;"></i>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="/bookmark?page={{ page_obj.next_page_number }}">next</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">next</a>
-                    </li>
-                {% endif %}
-        </ul>
-    {% endif %}
+    {% load bookmark_extra %}
+    <ul class="pagination pagination-sm justify-content-center mb-4">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="/bookmark?page={{ page_obj.previous_page_number }}">previous</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">previous</a>
+            </li>
+        {% endif %}
+        {% for page_num in page_obj.number|prange:page_obj.paginator.num_pages %}
+            {% if page_num == page_obj.number %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="/bookmark?page={{ page_obj.next_page_number }}">next</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">next</a>
+            </li>
+        {% endif %}
+    </ul>
 </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        p = $('.private');
+        s = $('.share');
+
+        p.addClass('border-warning');
+        s.addClass('border-primary');
+
+        p = $('.private .card-header'); //, .private .card-footer');
+        s = $('.share .card-header'); //, .share .card-footer');
+
+        p.addClass('bg-warning text-white');
+        s.addClass('bg-primary text-white');
+        
+        $('.card-body').css( 'cursor', 'pointer' ).hover(function () {
+            var footer = $(this).next();
+
+            if($(this).parent().hasClass('private')) {
+                footer.addClass('private-card-hover');
+            } else {
+                footer.addClass('public-card-hover');
+            }
+
+            var children = footer.children('a');
+            for(let i=0; i<children.length; i++) {
+                $(children[i]).removeClass('text-dark');
+                $(children[i]).addClass('text-white');
+            }
+        }, function () {
+            var footer = $(this).next();
+
+            if($(this).parent().hasClass('private')) {
+                $(this).next().removeClass('private-card-hover');
+            } else {
+                $(this).next().removeClass('public-card-hover');
+            }
+
+            var children = footer.children('a');
+            for(let i=0; i<children.length; i++) {
+                $(children[i]).addClass('text-dark');
+                $(children[i]).removeClass('text-white');
+            }
+        });
+    </script>
 {% endblock %}
