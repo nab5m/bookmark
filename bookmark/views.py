@@ -98,11 +98,11 @@ class ItemUpdateView(UpdateView):
 
 class PublicBookmarkListView(ListView):
     model = BookmarkList
-    template_name = "bookmark/bookmark_public_list.html"
+    template_name = "bookmark/public_bookmark_list.html"
     paginate_by = 5
 
     def get_queryset(self):
-        _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['username']).get()
+        _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['nickname']).get()
         print(_user)
         if _user:
             queryset = get_list_or_404(BookmarkList, user=_user, access_level='S')
@@ -114,11 +114,11 @@ class PublicBookmarkListView(ListView):
 
 class PublicItemListView(ListView):
     model = BookmarkList
-    template_name = "bookmark/item_list.html"
+    template_name = "bookmark/public_item_list.html"
     paginate_by = 5
 
     def get_queryset(self):
-        _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['username']).get()
+        _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['nickname']).get()
         print(_user)
         if _user:
             _list = get_object_or_404(

@@ -26,6 +26,7 @@ urlpatterns = [
     path('<int:list_pk>/detail/<int:pk>/', custom_login_required(ItemDetailView.as_view()), name="item_detail"),
     path('<int:list_pk>/update/<int:pk>/', custom_login_required(ItemUpdateView.as_view()), name="update_item"),
 
-    path('<str:username>/', PublicBookmarkListView.as_view(), name='public_list'),
-    path('<str:username>/<int:pk>/', PublicItemListView.as_view(), name='public_item_list'),
+    path('<str:nickname>/', PublicBookmarkListView.as_view(), name='public_list'),
+    path('<str:nickname>/<int:pk>/', PublicItemListView.as_view(), name='public_item_list'),
+    path('<str:nickname>/<int:list_pk>/detail/<int:pk>/', ItemDetailView.as_view(), name="public_item_detail")
 ]
