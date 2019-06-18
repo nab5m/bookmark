@@ -2,6 +2,12 @@
 {% block title %}{{ block.super }}-내 북마크 목록{% endblock %}
 {% block content %}
 <div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <script>alert('{{ message }}');</script>
+        {% endfor %}
+    {% endif %}
+
     <a href="{% url 'bookmark:add_list' %}" class="btn btn-info mb-3">
         추가하기
     </a>

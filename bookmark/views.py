@@ -1,3 +1,4 @@
+from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView, DetailView
 
@@ -11,9 +12,13 @@ class BookmarkListView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        queryset = super(BookmarkListView, self).get_queryset()
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
+        user = self.request.user
+        if user.is_authenticated:
+            queryset = get_list_or_404(BookmarkList, user=self.request.user)
+            return queryset
+        else:
+            # TODO: 임시 방편
+            return []
 
 
 class ListUpdateView(UpdateView):
@@ -35,9 +40,13 @@ class ItemListView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        queryset = super(ItemListView, self).get_queryset()
-        queryset = queryset.filter(belonged_list=self.kwargs['pk'])
-        return queryset
+        user = self.request.user
+        if user.is_authenticated:
+            queryset = get_list_or_404(BookmarkItem, belonged_list=self.kwargs['pk'])
+            return queryset
+        else:
+            # TODO: 임시 방편
+            return []
 
 
 class ItemCreateView(CreateView):

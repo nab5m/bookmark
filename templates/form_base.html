@@ -13,14 +13,19 @@
 
             {% for field in form %}
                 <!-- TODO: errors 어떻게 표시? -->
-                {{ field.errors }}
+                <ul>
+                    {% for error in field.errors %}
+                        <li class="text-danger">{{ error }}</li>
+                    {% endfor %}
+                </ul>
                 {{ field.label }}<br/>
                 {{ field }}<br/>
                 {% if field.help_text %}
                     <small class="text-warning">{{ field.help_text }}</small><br />
                 {% endif %}
             {% endfor %}
-            <input type="submit" value="{{ button_value }}" class="btn btn-success w-100" />
+
+            <input type="submit" value="{{ button_value }}" class="btn btn-success w-100 my-3" />
         </form>
     </div>
 {% endblock %}
