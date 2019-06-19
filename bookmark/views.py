@@ -47,7 +47,7 @@ class ListCreateView(CreateView):
 class ItemListView(ListView):
     model = BookmarkItem
     template_name = "bookmark/item_list.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         user = self.request.user
