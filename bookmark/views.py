@@ -107,7 +107,7 @@ class ItemUpdateView(UpdateView):
 class PublicBookmarkListView(ListView):
     model = BookmarkList
     template_name = "bookmark/public_bookmark_list.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['nickname']).get()
@@ -123,7 +123,7 @@ class PublicBookmarkListView(ListView):
 class PublicItemListView(ListView):
     model = BookmarkList
     template_name = "bookmark/public_item_list.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         _user = UserProfile.objects.filter(username=self.request.resolver_match.kwargs['nickname']).get()

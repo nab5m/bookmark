@@ -19,8 +19,8 @@
     </div>
 
     <div class="mb-4 text-white">
-        <div class="bg-primary p-1 d-inline-block" style="width: 4rem;">공개</div>
-        <div class="bg-warning p-1 d-inline-block" style="width: 4rem;">비공개</div>
+        <div class="bg-primary p-1 d-inline-block text-center" style="width: 4rem;">공개</div>
+        <div class="bg-warning p-1 d-inline-block text-center" style="width: 4rem;">비공개</div>
     </div>
 
     <div class="card-columns mb-3">
@@ -54,10 +54,11 @@
     </div>
 
     {% load bookmark_extra %}
+
     <ul class="pagination pagination-sm justify-content-center mb-4">
         {% if page_obj.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="/bookmark?page={{ page_obj.previous_page_number }}">previous</a>
+                <a class="page-link" href="/bookmark/?page={{ page_obj.previous_page_number }}">previous</a>
             </li>
         {% else %}
             <li class="page-item disabled">
@@ -67,18 +68,18 @@
         {% for page_num in page_obj.number|prange:page_obj.paginator.num_pages %}
             {% if page_num == page_obj.number %}
                 <li class="page-item disabled">
-                    <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
+                    <a class="page-link" href="/bookmark/?page={{ page_num }}">{{ page_num }}</a>
                 </li>
             {% else %}
                 <li class="page-item">
-                    <a class="page-link" href="/bookmark?page={{ page_num }}">{{ page_num }}</a>
+                    <a class="page-link" href="/bookmark/?page={{ page_num }}">{{ page_num }}</a>
                 </li>
             {% endif %}
         {% endfor %}
 
         {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link" href="/bookmark?page={{ page_obj.next_page_number }}">next</a>
+                <a class="page-link" href="/bookmark/?page={{ page_obj.next_page_number }}">next</a>
             </li>
         {% else %}
             <li class="page-item disabled">

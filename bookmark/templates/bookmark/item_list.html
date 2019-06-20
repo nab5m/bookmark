@@ -49,11 +49,11 @@
 
     {% load bookmark_extra %}
 
-    {% if is_paginated %}
+    {% with list_pk=request.resolver_match.kwargs.pk %}
         <ul class="pagination pagination-sm justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_obj.previous_page_number }}">
+                        <a class="page-link" href="/bookmark/{{ list_pk }}/?page={{ page_obj.previous_page_number }}">
                             previous
                         </a>
                     </li>
@@ -65,13 +65,13 @@
                 {% for page_num in page_obj.number|prange:page_obj.paginator.num_pages %}
                     {% if page_num == page_obj.number %}
                         <li class="page-item disabled">
-                            <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_num }}">
+                            <a class="page-link" href="/bookmark/{{ list_pk }}/?page={{ page_num }}">
                                 {{ page_num }}
                             </a>
                         </li>
                     {% else %}
                         <li class="page-item">
-                            <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_num }}">
+                            <a class="page-link" href="/bookmark/{{ list_pk }}/?page={{ page_num }}">
                                 {{ page_num }}
                             </a>
                         </li>
@@ -80,7 +80,7 @@
 
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="/bookmark/{{ request.resolver_match.kwargs.pk }}/?page={{ page_obj.next_page_number }}">
+                        <a class="page-link" href="/bookmark/{{ list_pk }}/?page={{ page_obj.next_page_number }}">
                             next
                         </a>
                     </li>
@@ -90,7 +90,7 @@
                     </li>
                 {% endif %}
         </ul>
-    {% endif %}
+    {% endwith %}
 </div>
 {% endblock %}
 {% block scripts %}
