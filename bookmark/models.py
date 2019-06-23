@@ -6,7 +6,7 @@ from accounts.models import UserProfile
 
 
 class BookmarkList(models.Model):
-    user = models.ManyToManyField(UserProfile)
+    user = models.ManyToManyField(UserProfile, related_name='own_list')
 
     list_name = models.CharField(_("리스트 이름"), max_length=50)
     description = models.CharField(_("설명"), max_length=255)

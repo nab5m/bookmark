@@ -19,16 +19,22 @@
     </div>
 
     <div class="mb-4 text-white">
-        <div class="bg-primary p-1 d-inline-block text-center" style="width: 4rem;">공개</div>
-        <div class="bg-warning p-1 d-inline-block text-center" style="width: 4rem;">비공개</div>
+        <div class="p-1 d-inline-block text-center" style="width: 4rem; background: #34e89e;">공개</div>
+        <div class="bg-warning p-1 d-inline-block text-center" style="width: 4rem; background: linear-gradient(90deg,#F2994A,#F2C94C);">비공개</div>
     </div>
 
     <div class="card-columns mb-3">
         {% for bookmark_list in object_list %}
             <div class="card
                 {% if bookmark_list.access_level == 'P' %}private{% else %}share{% endif %}">
-                <div class="card-header background-warning px-2">
-                    <i class="fas fa-user-circle align-middle px-2" style="font-size: 2em;"></i>
+                <div class="card-header text-white px-2">
+                    {% with profile_image_url=bookmark_list.user.get.profile_image.url %}
+                        {% if profile_image_url == '/media/profile_images/no_image.png' %}
+                            <i class="fas fa-user-circle align-middle px-2" style="font-size: 2em;"></i>
+                        {% else %}
+                            <img src="{{ bookmark_list.user.get.profile_image.url }}" width="50" height="50" class="rounded-circle" />
+                        {% endif %}
+                    {% endwith %}
                     <span class="align-middle">{{ bookmark_list.user.get.nickname }}</span>
                 </div>
                 <div onclick="location.href='{% url 'bookmark:item_list' bookmark_list.id %}';" class="card-body pl-3" style="text-decoration: none;">
@@ -39,15 +45,20 @@
                     </h6>
                     <p class="card-text">{{ bookmark_list.description }}</p>
                 </div>
-                <div class="card-footer text-right" style="font-size: 1.3rem;">
-                    <i class="far fa-heart" style="padding: 0.2rem;"></i>
-                    <i class="fas fa-share-alt" style="padding: 0.2rem;"></i>
-                    <a href="{% url 'bookmark:update_list' bookmark_list.id %}" style="text-decoration: none;" class="text-dark">
-                        <i class="fas fa-pencil-alt" style="padding: 0.2rem;"></i>
-                    </a>
-                    <a href="{% url 'bookmark:delete_list' bookmark_list.id %}" style="text-decoration: none;" class="text-dark">
-                        <i class="far fa-trash-alt" style="padding: 0.2rem;"></i>
-                    </a>
+                <div class="card-footer" style="height: 3.5rem; position: relative; font-size: 1.3rem;">
+                    <div class="d-inline-block" style="position: absolute; left: 1em;">
+                        <i class="fas fa-heart p-0" style="color: red; padding: 0.2rem;"></i>
+                        <small style="font-size: 0.8rem;">{{ bookmark_list.fan_of_list.count }}</small>
+                    </div>
+                    <div class="d-inline-block text-right" style="position: absolute; right: 1em;">
+                        <i class="fas fa-share-alt" style="padding: 0.2rem;"></i>
+                        <a href="{% url 'bookmark:update_list' bookmark_list.id %}" style="text-decoration: none;" class="text-dark">
+                            <i class="fas fa-pencil-alt" style="padding: 0.2rem;"></i>
+                        </a>
+                        <a href="{% url 'bookmark:delete_list' bookmark_list.id %}" style="text-decoration: none;" class="text-dark">
+                            <i class="far fa-trash-alt" style="padding: 0.2rem;"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -95,13 +106,16 @@
         s = $('.share');
 
         p.addClass('border-warning');
-        s.addClass('border-primary');
+        s.css('border', '1px solid #34e89e')
 
         p = $('.private .card-header'); //, .private .card-footer');
         s = $('.share .card-header'); //, .share .card-footer');
 
-        p.addClass('bg-warning text-white');
-        s.addClass('bg-primary text-white');
+        p.css('background', 'linear-gradient(90deg,#F2994A,#F2C94C)');
+        s.css('background', '#34e89e');
+
+        //p.addClass('bg-warning text-white');
+        //s.addClass('bg-primary text-white');
         
         $('.card-body').css( 'cursor', 'pointer' ).hover(function () {
             var footer = $(this).next();
@@ -112,10 +126,12 @@
                 footer.addClass('public-card-hover');
             }
 
-            var children = footer.children('a');
-            for(let i=0; i<children.length; i++) {
-                $(children[i]).removeClass('text-dark');
-                $(children[i]).addClass('text-white');
+            var childrens = [footer.children(), footer.find('a')];
+            for(let i=0; i<childrens.length; i++) {
+                for(let j=0; j<childrens[i].length; j++) {
+                    $(childrens[i][j]).addClass('text-white');
+                    $(childrens[i][j]).removeClass('text-dark');
+                }
             }
         }, function () {
             var footer = $(this).next();
@@ -126,10 +142,12 @@
                 $(this).next().removeClass('public-card-hover');
             }
 
-            var children = footer.children('a');
-            for(let i=0; i<children.length; i++) {
-                $(children[i]).addClass('text-dark');
-                $(children[i]).removeClass('text-white');
+            var childrens = [footer.children(), footer.find('a')];
+            for(let i=0; i<childrens.length; i++) {
+                for(let j=0; j<childrens[i].length; j++) {
+                    $(childrens[i][j]).addClass('text-dark');
+                    $(childrens[i][j]).removeClass('text-white');
+                }
             }
         });
     </script>

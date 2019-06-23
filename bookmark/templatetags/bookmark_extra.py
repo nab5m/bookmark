@@ -17,3 +17,10 @@ def page_range(value, arg):
 def item_num(value, arg):
     item_num = (value-1)*5 + arg
     return item_num
+
+@register.filter
+def return_item(arr, _key):
+    try:
+        return arr[_key]
+    except:
+        return None

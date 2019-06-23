@@ -49,7 +49,11 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = UserProfile
-        fields = ('username', 'email', 'password1', 'password2', 'name')
+        fields = ('username', 'nickname', 'email', 'password1', 'password2', 'name',
+                    'birth_date', 'belong_to', 'state_message', 'profile_image')
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'})
+        }
 
 
 class PWChangeForm(PasswordChangeForm):

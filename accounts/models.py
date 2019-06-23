@@ -3,6 +3,8 @@ from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from django.apps import apps
+
 
 class UsernameValidator(ASCIIUsernameValidator):
     regex = r'^[\w-]+\Z'
@@ -12,6 +14,9 @@ class UsernameValidator(ASCIIUsernameValidator):
 
 
 class UserProfile(AbstractUser):
+    def _upload_to(instance, filename): # ToDo: 업로드 하는 경로 유의하기
+        return 'profile_images/%s/%s' % (instance.username, filename)
+
     username_validator = UsernameValidator()
     username = models.CharField(
         _('아이디'),
@@ -38,6 +43,41 @@ class UserProfile(AbstractUser):
     name = models.CharField(_('이름'), max_length=15, blank=True)
     first_name = last_name = None
 
+    birth_date = models.DateField(_('생년월일'), blank=True, null=True)
+    belong_to = models.CharField(_('소속'), max_length=30, blank=True, null=True)
+
+    profile_image = models.ImageField(_('프로필 이미지'), upload_to=_upload_to, default='profile_images/no_image.png')
+    state_message = models.CharField(_('상태 메시지'), max_length=50, blank=True, null=True)
+
+    followings = models.ManyToManyField('self', related_name="followings", blank=True)
+    followers = models.ManyToManyField('self', related_name="followers", blank=True)
+
+    favorite_lists = models.ManyToManyField('bookmark.BookmarkList', related_name="fan_of_list", blank=True)
+    favorite_items = models.ManyToManyField('bookmark.BookmarkItem', related_name="fan_of_item", blank=True)
 
     # REQUIRED_FIELDS = [email]
     # username과 password는 required, AbstractUser에서는 email도
+
+    def is_list_fan(self, _list_pk):
+        BookmarkList = apps.get_model('bookmark.BookmarkList')
+        _list = BookmarkList.objects.get(pk=_list_pk)
+        if _list:
+            if _list.fan_of_list.filter(pk=self.pk):
+                return {
+                    'list': _list,
+                    'is_fan': True,
+                }
+
+        return None # ToDo: raise 404
+
+    def is_item_fan(self, _item_pk):
+        BookmarkItem = apps.get_model('bookmark.BookmarkItem')
+        _item = BookmarkItem.objects.get(pk=_item_pk)
+        if _item:
+            if _item.fan_of_item.filter(pk=self.pk):
+                return {
+                    'item': _item,
+                    'is_fan': True,
+                }
+
+        return None  # ToDo: raise 404
