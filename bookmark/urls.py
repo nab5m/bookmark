@@ -3,7 +3,7 @@ from django.urls import path
 from bookmark.views import ListCreateView, BookmarkListView, \
     ListUpdateView, ItemListView, ItemCreateView, ItemDeleteView, ItemDetailView, ItemUpdateView, \
     PublicBookmarkListView, PublicItemListView, ListDeleteView, register_favorite_list, delist_favorite_list, \
-    register_favorite_item, delist_favorite_item
+    register_favorite_item, delist_favorite_item, follow_user, unfollow_user
 from config.library.views import custom_login_required
 # ToDo: LoginRequiredMixin Redirect to login_success view
 
@@ -24,8 +24,12 @@ urlpatterns = [
     path('<str:nickname>/', PublicBookmarkListView.as_view(), name='public_list'),
     path('<str:nickname>/<int:pk>/', PublicItemListView.as_view(), name='public_item_list'),
     path('<str:nickname>/<int:list_pk>/detail/<int:pk>/', ItemDetailView.as_view(), name="public_item_detail"),
+
     path('<str:nickname>/<int:pk>/like-this/', register_favorite_list, name="register_favorite_list"),
     path('<str:nickname>/<int:pk>/unlike-this/', delist_favorite_list, name="delist_favorite_list"),
     path('<str:nickname>/<int:list_pk>/<int:pk>/like-this/', register_favorite_item, name="register_favorite_item"),
     path('<str:nickname>/<int:list_pk>/<int:pk>/unlike-this/', delist_favorite_item, name="delist_favorite_item"),
+
+    path('<str:nickname>/follow/', follow_user, name='follow_user'),
+    path('<str:nickname>/unfollow/', unfollow_user, name="unfollow_user"),
 ]

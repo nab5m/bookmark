@@ -14,6 +14,10 @@
         </a>
     </div>
 
+    <div class="mb-2">
+        팔로워: {{ follower_cnt }}
+    </div>
+
     <div class="card-columns mb-3">
         {% for bookmark in object_list %}
             <div class="card" style="border: 1px solid #34e89e">
@@ -41,7 +45,13 @@
                 </div>
                 <div class="card-footer" style="height: 3.5rem; position: relative; font-size: 1.3rem;">
                     <div class="d-inline-block" style="position: absolute; left: 1em;">
-                        <i class="fas fa-heart p-0" style="color: red; padding: 0.2rem;"></i>
+                        <i class="
+                            {% if bookmark.fan_of_item.count %}
+                                fas
+                            {% else %}
+                                far
+                            {% endif %}
+                            fa-heart p-0" style="color: red; padding: 0.2rem;"></i>
                         <small style="font-size: 0.8rem;">{{ bookmark.fan_of_item.count }}</small>
                     </div>
                     <div class="d-inline-block text-right" style="position: absolute; right: 1em;">

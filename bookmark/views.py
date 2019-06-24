@@ -4,7 +4,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView, DetailView
 
-from accounts.models import UserProfile
+from accounts.models import UserProfile, Follower
 from bookmark.forms import ListForm, ItemForm
 from bookmark.models import BookmarkItem, BookmarkList
 
@@ -22,6 +22,15 @@ class BookmarkListView(ListView):
         else:
             # TODO: 임시 방편
             return []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        _user = self.request.user
+
+        context['follower_cnt'] = Follower.objects.filter(following=_user).count()
+
+        return context
+
 
 
 class ListCreateView(LoginRequiredMixin, CreateView): # ToDo: login success로 redirect
@@ -68,7 +77,11 @@ class ItemListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        _user = self.request.user
+
         context['url_list_pk'] = self.kwargs.get('pk')
+        context['follower_cnt'] = Follower.objects.filter(following=_user).count()
+
         return context
 
 
@@ -124,7 +137,6 @@ class PublicBookmarkListView(ListView):
 
     def get_queryset(self):
         _user = UserProfile.objects.filter(nickname=self.kwargs.get('nickname')).get()
-        print(_user)
         if _user:
             queryset = get_list_or_404(BookmarkList, user=_user, access_level='S')
             return queryset
@@ -134,16 +146,17 @@ class PublicBookmarkListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['url_nickname'] = self.kwargs.get('nickname')
-
+        _nickname = self.kwargs.get('nickname')
         _user = self.request.user
         _list = context['object_list']
+
+
+        context['url_nickname'] = _nickname
+        context['is_following'] = _user.is_following(_nickname)
 
         _is_list_fan = dict()
         for item in _list:
             _is_list_fan[item.pk] = _user.is_list_fan(item.pk)
-
-        print(_is_list_fan)
 
         context['is_fan'] = _is_list_fan
 
@@ -157,7 +170,6 @@ class PublicItemListView(ListView):
 
     def get_queryset(self):
         _user = UserProfile.objects.filter(nickname=self.kwargs.get('nickname')).get()
-        print(_user)
         if _user:
             _list = get_object_or_404(
                 BookmarkList,
@@ -173,8 +185,13 @@ class PublicItemListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        _nickname = self.kwargs.get('nickname')
+        _user = self.request.user
+
         context['url_list_pk'] = self.kwargs.get('pk')
         context['url_nickname'] = self.kwargs.get('nickname')
+        context['is_following'] = _user.is_following(_nickname)
+
         return context
 
 
@@ -247,5 +264,45 @@ def delist_favorite_item(request, **kwargs):
 
     return JsonResponse(
         {'status':'false','message': 'delist 실패'},
+        status=500
+    )
+
+
+def follow_user(request, nickname):
+    _user = request.user
+    if request.method == "POST" and _user.nickname != nickname:
+        if not _user.is_following(nickname):
+            _followed = UserProfile.objects.filter(nickname=nickname).get()
+
+            print(_followed.nickname)
+
+            follow = Follower(following=_followed, follower=_user)
+            follow.save()
+
+            return JsonResponse({
+                'cnt': Follower.objects.filter(following=_followed).count()
+            })
+
+    return JsonResponse(
+        {'status': 'false', 'message': 'follow 실패'},
+        status=500
+    )
+
+
+def unfollow_user(request, nickname):  # ToDo: 코드 형식이 너무 비슷해 보임, 실패 메시지 제대로
+    _user = request.user
+    if request.method == "POST":
+        if _user.is_following(nickname):
+            _followed = UserProfile.objects.filter(nickname=nickname).get()
+
+            follow = Follower.objects.filter(following=_followed, follower=_user)
+            follow.delete()
+
+            return JsonResponse({
+                'cnt': Follower.objects.filter(following=_followed).count()
+            })
+
+    return JsonResponse(
+        {'status': 'false', 'message': 'unfollow 실패'},
         status=500
     )

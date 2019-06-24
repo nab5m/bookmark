@@ -23,6 +23,10 @@
         <div class="bg-warning p-1 d-inline-block text-center" style="width: 4rem; background: linear-gradient(90deg,#F2994A,#F2C94C);">비공개</div>
     </div>
 
+    <div class="mb-2">
+        팔로워: {{ follower_cnt }}
+    </div>
+
     <div class="card-columns mb-3">
         {% for bookmark_list in object_list %}
             <div class="card
@@ -47,7 +51,13 @@
                 </div>
                 <div class="card-footer" style="height: 3.5rem; position: relative; font-size: 1.3rem;">
                     <div class="d-inline-block" style="position: absolute; left: 1em;">
-                        <i class="fas fa-heart p-0" style="color: red; padding: 0.2rem;"></i>
+                        <i class="
+                            {% if bookmark_list.fan_of_list.count %}
+                                fas
+                            {% else %}
+                                far
+                            {% endif %}
+                            fa-heart p-0" style="color: red; padding: 0.2rem;"></i>
                         <small style="font-size: 0.8rem;">{{ bookmark_list.fan_of_list.count }}</small>
                     </div>
                     <div class="d-inline-block text-right" style="position: absolute; right: 1em;">

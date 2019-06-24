@@ -6,20 +6,25 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-<!--
     {% load bookmark_extra %}
 
+{% comment %}
     {% if messages %}
         {% for message in messages %}
             <script>alert('{{ message }}');</script>
         {% endfor %}
     {% endif %}
+{% endcomment %}
 
-    <a href="{% url 'bookmark:add_list' %}" class="btn btn-info mb-3">
-        추가하기
-    </a>
--->
     {% include 'back_button.html' %}
+
+    <button id="follow-btn" class="btn btn-info mb-3">
+        {% if is_following %}
+            <i class="fas fa-user-times">언팔로우</i>
+        {% else %}
+            <i class="fas fa-user-plus">팔로우</i>
+        {% endif %}
+    </button>
 
     <div class="card-columns mb-3">
         {% for bookmark_list in object_list %}
@@ -148,6 +153,7 @@
             var _url = location.href + _id;
 
             _url += is_liked($this) ? '/unlike-this/' : '/like-this/';
+            // ToDo: absolute route
 
             $.ajax({
                 url: _url,
@@ -165,7 +171,45 @@
             });
         }
 
+        function is_following($this) {
+            return $this.hasClass('fa-user-times');
+        }
+        function toggle_follow_btn($this, _is_following) { // ToDo: follower 카운트 보여주기
+            if(_is_following) {
+                $this.addClass('fa-user-plus');
+                $this.removeClass('fa-user-times');
+                $this.html('팔로우');
+            } else {
+                $this.removeClass('fa-user-plus');
+                $this.addClass('fa-user-times');
+                $this.html('언팔로우');
+            }
+        }
+        function on_follow_btn_clicked() {
+            var $this = $($(this).children()[0]);
+            var _is_following = is_following($this)
+            var _url =
+                 _is_following ? '{% url 'bookmark:unfollow_user' nickname=url_nickname %}'
+                    : '{% url 'bookmark:follow_user' nickname=url_nickname %}';
+
+            $.ajax({
+                url: _url,
+                type: 'POST',
+                data: {
+                    'nickname': '{{ url_nickname }}',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function () {
+                    toggle_follow_btn($this, _is_following);
+                },
+                error: function() {
+                    console.log('팔로/언팔 실패');
+                }
+            });
+        }
+
         $('.card-body').css( 'cursor', 'pointer' ).hover(on_hover_card_body, out_hover_card_body);
         $('[id^=list_]').css('cursor', 'pointer').on('click', on_heart_clicked);
+        $('[id=follow-btn]').on('click', on_follow_btn_clicked);
     </script>
 {% endblock %}
