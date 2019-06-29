@@ -26,6 +26,10 @@
         {% endif %}
     </button>
 
+    <div class="mb-2">
+        팔로워: {{ follower_cnt }}
+    </div>
+
     <div class="card-columns mb-3">
         {% for bookmark_list in object_list %}
             <div class="card">

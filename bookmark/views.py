@@ -148,9 +148,10 @@ class PublicBookmarkListView(ListView):
         context = super().get_context_data(**kwargs)
         _nickname = self.kwargs.get('nickname')
         _user = self.request.user
+        _owner = UserProfile.objects.filter(nickname=_nickname).get()
         _list = context['object_list']
 
-
+        context['follower_cnt'] = Follower.objects.filter(following=_owner).count()
         context['url_nickname'] = _nickname
         context['is_following'] = _user.is_following(_nickname)
 

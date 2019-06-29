@@ -17,11 +17,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+import app_index.urls as app_index_urls
 import bookmark.urls as bookmark_urls
 import accounts.urls as accounts_urls
 from config import settings
 
 urlpatterns = [
+    path('', include(app_index_urls)),
     path('admin/', admin.site.urls),
     path('accounts/', include(accounts_urls)),
     path('bookmark/', include(bookmark_urls)),

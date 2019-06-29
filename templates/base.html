@@ -14,7 +14,7 @@
   <body>
     <header style="background-color: #222222;">
         <nav class="container-fluid px-sm-5 mb-3 navbar navbar-expand-lg navbar-dark">
-            <h2 class="col-3 pl-0"><a href="{% url 'bookmark:index' %}" class="navbar-brand">Django Bookmark</a></h2>
+            <h2 class="col-3 pl-0"><a href="{% url 'index' %}" class="navbar-brand">Django Bookmark</a></h2>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,6 +44,54 @@
             </div>
         </nav>
     </header>
+
+    <div class="container mb-5">
+        <div class="accordion border-bottom" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne" style="text-decoration: none;">
+                            how it works
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <p>
+                            /bookmark/ => 자신의 북마크 리스트<br/>
+                            /bookmark/test_001(~010)/ => 공개로 설정한 북마크 리스트
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                                aria-expanded="true" aria-controls="collapseTwo" style="text-decoration: none;">
+                            To Do
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <p>
+                            <ul>
+                                <li>댓글</li>
+                                <li>정렬/검색</li>
+                                <li>race condition</li>
+                                <li>배포 방법</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <main>
         {% block content %}{% endblock %}

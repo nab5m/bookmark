@@ -49,9 +49,6 @@ class UserProfile(AbstractUser):
     profile_image = models.ImageField(_('프로필 이미지'), upload_to=_upload_to, default='profile_images/no_image.png')
     state_message = models.CharField(_('상태 메시지'), max_length=50, blank=True, null=True)
 
-    # following = models.ForeignKey('self', related_name="followers", on_delete=models.CASCADE)
-    # follower = models.ForeignKey('self', related_name="followings", on_delete=models.CASCADE)
-
     favorite_lists = models.ManyToManyField('bookmark.BookmarkList', related_name="fan_of_list", blank=True)
     favorite_items = models.ManyToManyField('bookmark.BookmarkItem', related_name="fan_of_item", blank=True)
 
@@ -84,7 +81,7 @@ class UserProfile(AbstractUser):
 
     def is_following(self, _owner_nickname):
         _owner = UserProfile.objects.filter(nickname=_owner_nickname).get()
-        return self.following.filter(following=_owner)
+        return self.following.filter(following=_owner).count()
 
 
 class Follower(models.Model):
