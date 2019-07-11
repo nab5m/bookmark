@@ -27,7 +27,8 @@ class BookmarkListView(ListView):
         context = super().get_context_data(**kwargs)
         _user = self.request.user
 
-        context['follower_cnt'] = Follower.objects.filter(following=_user).count()
+        if _user.is_authenticated:
+            context['follower_cnt'] = Follower.objects.filter(following=_user).count()
 
         return context
 
@@ -80,7 +81,8 @@ class ItemListView(ListView):
         _user = self.request.user
 
         context['url_list_pk'] = self.kwargs.get('pk')
-        context['follower_cnt'] = Follower.objects.filter(following=_user).count()
+        if _user.is_authenticated:
+            context['follower_cnt'] = Follower.objects.filter(following=_user).count()
 
         return context
 
